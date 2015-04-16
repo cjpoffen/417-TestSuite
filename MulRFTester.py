@@ -12,7 +12,8 @@ import unittest
 #print gene2species("smik_13")
 
 class TestMulRFCost(unittest.TestCase):
-    def test(self):
+
+    def testWithBinaryTres(self):
         mul = MulRFModel(extra = None)
         gene2species = phylo.read_gene2species("../../../examples/test/24Hits.smap")
         stree = treelib.read_tree('../../../examples/test/24Hits.stree')
@@ -23,40 +24,29 @@ class TestMulRFCost(unittest.TestCase):
         
         self.assertEqual(mul.compute_cost(gtree), 4)
 
-
-
-class TestStringMethods(unittest.TestCase):
-
-  def test_upper(self):
-      self.assertEqual('foo'.upper(), 'FOO')
-
-  def test_isupper(self):
-      self.assertTrue('FOO'.isupper())
-      self.assertFalse('Foo'.isupper())
-
-  def test_split(self):
-      s = 'hello world'
-      self.assertEqual(s.split(), ['hello', 'world'])
-      # check that s.split fails when the separator is not a string
-      with self.assertRaises(TypeError):
-          s.split(2)
-
-          
-class TestStringMethod(unittest.TestCase):
-
-  def test_upper(self):
-      self.assertEqual('foo'.upper(), 'FOO')
-
-  def test_isupper(self):
-      self.assertTrue('FOO'.isupper())
-      self.assertFalse('Foo'.isupper())
-
-  def test_split(self):
-      s = 'hello world'
-      self.assertEqual(s.split(), ['hello', 'world'])
-      # check that s.split fails when the separator is not a string
-      with self.assertRaises(TypeError):
-          s.split(2)
-          
+    def test_Null_Trees(self):
+        mul = MulRFModel(extra = None)
+        stree = treelib.read_tree('../../../examples/test/EmptyTree.stree')
+        gtree = treelib.read_tree('../../../examples/test/EmptyTree.stree')
+        gene2species = phylo.read_gene2species("../../../examples/test/24Hits.smap")
+        mul.stree = stree
+        mul.gene2species = gene2species
+        
+        with self.assertRaises(AttributeError):
+            mul.compute_cost(gtree)
+            
+    def test_null_gtree(self):
+        mul = MulRFModel(extra = None)
+        gene2species = phylo.read_gene2species("../../../examples/test/24Hits.smap")
+        stree = treelib.read_tree('../../../examples/test/24Hits.stree')
+        gtree = treelib.read_tree('../../../examples/test/EmptyTree.stree')
+        
+        mul.stree = stree
+        mul.gene2species = gene2species
+        
+        with self.assertRaises(AttributeError):
+            mul.compute_cost(gtree)
+        
+   
 if __name__ == '__main__':
     unittest.main()
