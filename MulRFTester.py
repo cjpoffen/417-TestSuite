@@ -47,6 +47,75 @@ class TestMulRFCost(unittest.TestCase):
         with self.assertRaises(AttributeError):
             mul.compute_cost(gtree)
         
+    def test_non_binaryGene(self):
+        mul = MulRFModel(extra = None)
+        gene2species = phylo.read_gene2species("../../../examples/test/nonBinaryGene.smap")
+        stree = treelib.read_tree('../../../examples/test/nonBinaryGene.stree')
+        gtree = treelib.read_tree('../../../examples/test/nonBinaryGene.gtree')
+        
+        mul.stree = stree
+        mul.gene2species = gene2species
+        self.assertEqual(mul.compute_cost(gtree), 7)
    
+    def test_non_binaryAll(self):
+        mul = MulRFModel(extra = None)
+        gene2species = phylo.read_gene2species("../../../examples/test/nonBinaryAll.smap")
+        stree = treelib.read_tree('../../../examples/test/nonBinaryAll.stree')
+        gtree = treelib.read_tree('../../../examples/test/nonBinaryAll.gtree')
+        
+        mul.stree = stree
+        mul.gene2species = gene2species
+        self.assertEqual(mul.compute_cost(gtree), 6)
+      
+    def test_non_binary_gtree_error(self):
+        mul = MulRFModel(extra = None)
+        gene2species = phylo.read_gene2species("../../../examples/test/nonBinaryAll.smap")
+        stree = treelib.read_tree('../../../examples/test/nonBinaryAll.stree')
+        gtree = treelib.read_tree('../../../examples/test/nonBinaryAll.gtree')
+        
+        
+        with self.assertRaises(Exception):
+            mul.optimize_model(gtree, stree, gene2species)
+            
+    def test_non_binary_stree_error(self):
+        mul = MulRFModel(extra = None)
+        gene2species = phylo.read_gene2species("../../../examples/test/nonBinaryAll.smap")
+        stree = treelib.read_tree('../../../examples/test/nonBinaryAll.stree')
+        gtree = treelib.read_tree('../../../examples/test/24Hits.gtree')
+        
+        
+        with self.assertRaises(Exception):
+            mul.optimize_model(gtree, stree, gene2species)
+        
+    def test_smap_error(self):
+        mul = MulRFModel(extra = None)
+        gene2species = phylo.read_gene2species("../../../examples/test/nonBinaryAll.smap")
+        stree = treelib.read_tree('../../../examples/test/24Hits.stree')
+        gtree = treelib.read_tree('../../../examples/test/24Hits.gtree')
+        
+        
+        with self.assertRaises(Exception):
+            mul.optimize_model(gtree, stree, None)
+
+    def test_single_node(self):
+        
+        sNode = treelib.TreeNode()
+        gNode = treelib.TreeNode()
+        
+        mul = MulRFModel(extra = None)
+        gene2species = phylo.read_gene2species("../../../examples/test/nonBinaryAll.smap")
+        
+        mul.stree = sNode
+        mul.gene2species = gene2species
+        
+        with self.assertRaises(AttributeError):
+            mul.compute_cost(gNode)
+        
+    
+    
+    
+    
+    
+        
 if __name__ == '__main__':
     unittest.main()
