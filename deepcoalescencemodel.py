@@ -18,7 +18,7 @@ from compbio import phylo
 import StringIO
 #=============================================================================
 
-class MulRFModel(CostModel):
+class DeepCoalescenceModel(CostModel):
     """Computes Robinson-Foulds or MulRF costs"""
 
     def __init__(self, extra):
@@ -104,8 +104,8 @@ class MulRFModel(CostModel):
                 while not found:
                     sNode = sNode.parent
                     for node in gene2speciesLca:
-                            if node not in stree_lca_dict[sNode]:
-                                break
+                        if node not in stree_lca_dict[sNode]:
+                            break
                     else:
                         found = True
                         geneToSpeciesMap[gNodeLca] = sNode     
@@ -132,10 +132,10 @@ class MulRFModel(CostModel):
                 
             return count
                 
-        print 'internal nodes {0}'.format(countChildern(self.stree.root))
-        print count
-        raw_input("press enter")
-        return 5
+                
+        count = count - countChildern(self.stree.root)
+        
+        return count
      
 
 #cherry yum diddly dip

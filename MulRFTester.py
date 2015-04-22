@@ -1,5 +1,6 @@
 
 from mulrfmodel import *
+from deepcoalescencemodel import *
 from compbio import phylo
 from rasmus import treelib
 import unittest
@@ -13,7 +14,7 @@ import unittest
 
 class TestMulRFCost(unittest.TestCase):
 
-    def testWithBinaryTres(self):
+    def test_with_binary_trees(self):
         mul = MulRFModel(extra = None)
         gene2species = phylo.read_gene2species("../../../examples/test/24Hits.smap")
         stree = treelib.read_tree('../../../examples/test/24Hits.stree')
@@ -24,7 +25,7 @@ class TestMulRFCost(unittest.TestCase):
         
         self.assertEqual(mul.compute_cost(gtree), 4)
 
-    def test_Null_Trees(self):
+    def test_null_trees(self):
         mul = MulRFModel(extra = None)
         stree = treelib.read_tree('../../../examples/test/EmptyTree.stree')
         gtree = treelib.read_tree('../../../examples/test/EmptyTree.stree')
@@ -47,7 +48,7 @@ class TestMulRFCost(unittest.TestCase):
         with self.assertRaises(AttributeError):
             mul.compute_cost(gtree)
         
-    def test_non_binaryGene(self):
+    def test_non_binary_gene_tree(self):
         mul = MulRFModel(extra = None)
         gene2species = phylo.read_gene2species("../../../examples/test/nonBinaryGene.smap")
         stree = treelib.read_tree('../../../examples/test/nonBinaryGene.stree')
@@ -57,7 +58,7 @@ class TestMulRFCost(unittest.TestCase):
         mul.gene2species = gene2species
         self.assertEqual(mul.compute_cost(gtree), 7)
    
-    def test_non_binaryAll(self):
+    def test_nonbinary_trees(self):
         mul = MulRFModel(extra = None)
         gene2species = phylo.read_gene2species("../../../examples/test/nonBinaryAll.smap")
         stree = treelib.read_tree('../../../examples/test/nonBinaryAll.stree')
@@ -111,10 +112,16 @@ class TestMulRFCost(unittest.TestCase):
         with self.assertRaises(AttributeError):
             mul.compute_cost(gNode)
         
-    
-    
-    
-    
+    def test_deep(self):
+        deep = DeepCoalescenceModel(extra = None)
+        gene2species = phylo.read_gene2species("../../../examples/test/24Hits.smap")
+        stree = treelib.read_tree('../../../examples/test/test1.stree')
+        gtree = treelib.read_tree('../../../examples/test/test1.gtree')
+        
+        deep.stree = stree
+        deep.gene2species = gene2species
+        
+        self.assertEqual(deep.compute_cost(gtree), 2)
     
         
 if __name__ == '__main__':
